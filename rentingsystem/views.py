@@ -134,7 +134,7 @@ def esewa_verify(request, payment_id):
         payment.save()
 
 
-    return redirect('booking-details')
+    return redirect('booking-details',booking_id=payment.booking.id)
 
 
 
