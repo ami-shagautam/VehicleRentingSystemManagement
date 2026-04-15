@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin:0;
+            font-family: Arial;
+            display:flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width:230px;
+            background:#2c3e50;
+            color:white;
+            height:100vh;
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
+            padding:20px 5px;
+            gap:10px;
+              position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 10px;
+        }
+       
+
+        .main {
+            margin-left: 250px;
+        }
+        .menu a {
+            display:block;
+            color:white;
+            text-decoration:none;
+            margin:10px 0;
+            padding:8px;
+            border-radius:5px;
+            gap:18px;
+        }
+
+        .menu a:hover {
+            background:#34495e;
+        }
+
+        /* LOGOUT */
+        .logout a {
+            display:block;
+            background:red;
+            padding:10px;
+            text-align:center;
+            border-radius:5px;
+            color:white;
+            text-decoration:none;
+            margin-bottom: 30px;
+        }
+
+        .logout a:hover {
+            background:darkred;
+        }
+
+        /* MAIN AREA */
+        .main {
+            flex:1;
+            background:#f4f6f9;
+            display:flex;
+            flex-direction:column;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background:white;
+            padding:10px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .right-icons {
+            display:flex;
+            gap:20px;
+            font-size:20px;
+        }
+
+        .icon {
+            cursor:pointer;
+            position:relative;
+        }
+
+        /* CONTENT */
+        .content {
+            padding:30px;
+        }
+
+        /* CARDS */
+        .cards {
+            display:flex;
+            gap:20px;
+            margin-bottom:20px;
+        }
+
+        .card {
+            flex:1;
+            background:#e64e08bf;
+            color:white;
+            padding:20px;
+            border-radius:10px;
+            text-align:center;
+        }
+
+        /* TABLE */
+        table {
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+        }
+
+        th, td {
+            padding:10px;
+            border:1px solid #ddd;
+        }
+
+        .btn {
+            padding:6px 12px;
+            background:#3498db;
+            color:white;
+            text-decoration:none;
+            border-radius:5px;
+            border:none;
+        }
+
+        .btn-danger { background:red; }
+        .btn-success { background:green; }
+
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div>
+        <h2>Admin Panel</h2>
+
+        <div class="menu">
+            <a href="{% url 'dashboard_overview' %}">Dashboard</a>
+            <a href="{% url 'vehicle_dashboard' %}">Vehicles</a>
+            <a href="{% url 'booking_list' %}">Bookings</a>
+            <a href="{% url 'payment_dashboard' %}">Payments</a>
+        </div>
+    </div>
+
+    <!-- LOGOUT -->
+    <div class="logout">
+        <a href="{% url 'home'%}">Logout</a>
+    </div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- TOP NAVBAR -->
+    <div class="topbar">
+        <h3>Dashboard</h3>
+
+        <div class="right-icons">
+            <span class="icon">🔔</span>
+            <span class="icon">👤</span>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+        {% block main_content %}{% endblock %}
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vehicle Renting System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        #profileDropdown.open {
+            display: block !important;
+            animation: fadeDown 0.18s ease;
+        }
+        #profileBtn:hover { transform: scale(1.08); }
+        .dd-item-btn:hover { background-color: #f5f5f5 !important; }
+        .dd-logout-btn:hover { background-color: #fff5f5 !important; }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <nav class="nav-container">
+            <div class="logo">Driv<span>O</span></div>
+            <ul class="nav-links center-links">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'browse_vehicles' %}">Browse Vehicles</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact us</a></li>
+            </ul>
+            <ul class="nav-auth">
+                {% if request.user.is_authenticated %}
+                <li style="display: flex; gap: 20px; align-items: center;">
+                    <div style="position: relative;">
+
+                        <!-- Profile Icon -->
+                        <div id="profileBtn" onclick="toggleDropdown(event)"
+                            style="height: 46px; width: 46px; border-radius: 50%; background-color: white; display: flex; justify-content: center; align-items: center; font-size: 18px; color: #1a1a2e; cursor: pointer; transition: transform 0.15s; flex-shrink: 0;">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div id="profileDropdown"
+                            style="display: none; position: absolute; right: 0; top: 52px; background: #fff; border-radius: 11px; box-shadow: 0 8px 28px rgba(0,0,0,0.18); width: 165px; overflow: hidden; z-index: 1000;">
+                            <div style="position: absolute; top: -7px; right: 14px; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 7px solid #fff;"></div>
+
+                            <!-- Settings -->
+                            <a href="{% url 'profile_settings' %}" class="dd-item-btn"
+                                style="display: flex; align-items: center; gap: 10px; padding: 13px 16px; font-size: 14px; color: #333; text-decoration: none; transition: background 0.15s;">
+                                <span style="width: 28px; height: 28px; border-radius: 50%; background: #EEEDFE; color: #534AB7; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;">
+                                    <i class="fa-solid fa-gear"></i>
+                                </span>
+                                Settings
+                            </a>
+
+                            <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 0;">
+
+                            <!-- Logout -->
+                            <form method="POST" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dd-logout-btn"
+                                    style="display: flex; align-items: center; gap: 10px; padding: 13px 16px; font-size: 14px; color: #c0392b; cursor: pointer; border: none; background: none; width: 100%; text-align: left; transition: background 0.15s;">
+                                    <span style="width: 28px; height: 28px; border-radius: 50%; background: #FCEBEB; color: #A32D2D; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;">
+                                        <i class="fa-solid fa-right-from-bracket"></i>
+                                    </span>
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+                {% else %}
+                <li><a href="{% url 'login' %}" class="btn-login">Login</a></li>
+                <li><a href="{% url 'register' %}" class="btn btn-primary">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </nav>
+
+    {% block main_content %}
+    {% endblock %}
+
+    <br>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Driv<span>O</span></h3>
+                    <p>Elevating the rental experience through premium service and a world-class fleet.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" title="Facebook">f</a>
+                        <a href="#" class="social-icon" title="Twitter">𝕏</a>
+                        <a href="#" class="social-icon" title="Share">⤴</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#fleet">Fleet</a></li>
+                        <li><a href="#locations">Locations</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal & Support</h3>
+                    <ul>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#help">Help Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Stay Informed</h3>
+                    <p>Subscribe for exclusive offers and travel inspiration.</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Email" required>
+                        <button class="newsletter-btn" title="Subscribe">
+                            <span class="arrow-icon">▶</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom">
+                <p>© 2024 DRIVO Premium Rentals. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleDropdown(e) {
+            e.stopPropagation();
+            const dd = document.getElementById('profileDropdown');
+            const isOpen = dd.classList.contains('open');
+            if (isOpen) {
+                dd.classList.remove('open');
+                dd.style.display = 'none';
+            } else {
+                dd.style.display = 'block';
+                dd.classList.add('open');
+            }
+        }
+
+        document.addEventListener('click', function (e) {
+            const dd = document.getElementById('profileDropdown');
+            const btn = document.getElementById('profileBtn');
+            if (dd && btn && !btn.contains(e.target) && !dd.contains(e.target)) {
+                dd.style.display = 'none';
+                dd.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block main_content %}
+
+
+<div class="booking-page-container">
+
+    <!-- Left Column: Rental Details -->
+    <div class="rental-details">
+        <h2>Rental Details</h2>
+        <form method="POST" action="{% url 'book_vehicle' vehicle.id %}">
+            {% csrf_token %}
+            
+            <label>Pickup Date</label>
+            <input type="date" name="start_date" id="start_date" required>
+
+            <label>Pickup Time</label>
+            <input type="time" name="start_time" required>
+
+            <label>Return Date</label>
+            <input type="date" name="end_date" id="end_date" required>
+
+            <label>Return Time</label>
+            <input type="time" name="end_time" required>
+
+            <p><strong>Total Days:</strong> <span id="total_days">0</span></p>
+            <p><strong>Total Cost:</strong> Rs <span id="total_cost">0</span></p>
+          
+          <button type="submit" class="book-now-btn">Book Now</button>
+
+        </form>
+    </div>
+    <!-- Right Column: Vehicle Info -->
+    <div class="vehicle-info">
+        <h2>VECHICLE INFO</h2>
+        <img src="{{ vehicle.image.url }}" alt="{{ vehicle.name }}">
+        <p class="name"><strong>{{ vehicle.name }}</strong></p>
+        <p class="description">{{ vehicle.description }}</p>
+        <p class="price"><strong>Price per day:</strong> Rs {{ vehicle.price_per_day }}</p>
+    </div>
+
+</div>
+
+<style>
+.booking-page-container {
+    display: flex;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+.book-now-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background: #3498db;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.book-now-btn:hover {
+    background: #2980b9;
+}
+
+.rental-details {
+    flex: 1;
+    background: #e7d5d5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.rental-details h2 { 
+    margin-bottom: 15px; 
+    color: #07180e;
+
+}
+.rental-details label
+ { display: block;
+     margin-top: 10px; 
+     font-weight: bold;
+    color: #a18d8ddf;
+    }
+.rental-details input { 
+    width: 100%; 
+    padding: 8px; 
+    margin-top: 5px; 
+    border-radius: 5px; 
+    border: 1px solid #ccc; }
+.rental-details p {
+     margin-top: 10px; 
+     font-weight: bold; 
+     font-size: 15px;
+    color: #c15722ac; }
+.confirm-btn {
+     margin-top: 20px;
+      padding: 12px; 
+      width: 100%;
+       background: #27ae60; 
+       color: white;
+        border: none;
+         border-radius: 5px;
+          cursor: pointer; }
+.confirm-btn:hover {
+     background: #1e8449; }
+
+.vehicle-info {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.vehicle-info img { width: 100%; 
+    border-radius: 5px; 
+    margin-bottom: 10px;
+    border-radius: 10px; }
+.vehicle-info p {
+     margin: 5px 0;
+    color: #334239;
+margin-top: 10px; }
+.vehicle-info h2 {
+     margin-bottom: 10px;
+     color: #334239; }
+     .vehicle-info .price{
+        color: rgb(231, 142, 142);
+        margin-top: 20px;
+     }
+</style>
+<script>
+const startDateInput = document.getElementById('start_date');
+const endDateInput = document.getElementById('end_date');
+const totalDaysSpan = document.getElementById('total_days');
+const totalCostSpan = document.getElementById('total_cost');
+const pricePerDay = {{vehicle.price_per_day }};
+
+function calculateTotal() {
+
+    if(startDateInput.value && endDateInput.value){
+
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+
+        const diffTime = endDate - startDate;
+        const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+        if(diffDays >= 0){
+            const totalDays = diffDays + 1; // include pickup day
+            totalDaysSpan.textContent = totalDays;
+            totalCostSpan.textContent = totalDays * pricePerDay;
+        }else{
+            totalDaysSpan.textContent = 0;
+            totalCostSpan.textContent = 0;
+        }
+      
+}
+    }
+
+
+startDateInput.addEventListener("change", calculateTotal);
+endDateInput.addEventListener("change", calculateTotal);
+</script>
+{% endblock %}

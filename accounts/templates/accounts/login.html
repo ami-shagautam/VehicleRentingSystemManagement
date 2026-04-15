@@ -1,0 +1,364 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+ 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: drift 20s linear infinite;
+            pointer-events: none;
+        }
+ 
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1) 25%, transparent 25%, transparent 75%, rgba(102, 126, 234, 0.1) 75%, rgba(102, 126, 234, 0.1)),
+                        linear-gradient(45deg, rgba(102, 126, 234, 0.1) 25%, transparent 25%, transparent 75%, rgba(102, 126, 234, 0.1) 75%, rgba(102, 126, 234, 0.1));
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            animation: drift-slow 30s linear infinite;
+            pointer-events: none;
+        }
+ 
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+ 
+        @keyframes drift-slow {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-60px, -60px); }
+        }
+ 
+        .container {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            z-index: 10;
+        }
+ 
+        .form-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.8s ease-out;
+        }
+ 
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+ 
+        .form-box h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+ 
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+ 
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+ 
+        .input-group:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+ 
+        .input-group:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+ 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+ 
+        .input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+ 
+        .input-group input {
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background-color: #fafafa;
+        }
+ 
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+ 
+        .input-group input::placeholder {
+            color: #bbb;
+        }
+ 
+        .btn {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out 0.6s both;
+        }
+ 
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+ 
+        .btn:hover::before {
+            left: 100%;
+        }
+ 
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+ 
+        .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+ 
+        .auth-box {
+            min-height: 40px;
+            margin-top: 20px;
+        }
+ 
+        .auth-box .error {
+            background-color: #fee;
+            color: #c33;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            border-left: 4px solid #c33;
+            animation: slideIn 0.4s ease-out;
+            font-weight: 500;
+        }
+ 
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+ 
+        .form-box p {
+            text-align: center;
+            margin-top: 24px;
+            color: #666;
+            font-size: 14px;
+            animation: slideUp 0.6s ease-out 0.8s both;
+        }
+ 
+        .form-box a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+ 
+        .form-box a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+ 
+        .form-box a:hover {
+            color: #764ba2;
+        }
+ 
+        .form-box a:hover::after {
+            width: 100%;
+        }
+ 
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            body {
+                padding: 20px;
+            }
+ 
+            .form-box {
+                padding: 40px 25px;
+                border-radius: 16px;
+            }
+ 
+            .form-box h2 {
+                font-size: 28px;
+                margin-bottom: 24px;
+            }
+ 
+            .input-group {
+                gap: 6px;
+            }
+ 
+            .input-group label {
+                font-size: 13px;
+            }
+ 
+            .input-group input {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+ 
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+ 
+            .form-box p {
+                font-size: 13px;
+                margin-top: 20px;
+            }
+        }
+ 
+        @media (max-width: 400px) {
+            .form-box {
+                padding: 30px 20px;
+            }
+ 
+            .form-box h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+ 
+            form {
+                gap: 18px;
+            }
+ 
+            .input-group input {
+                padding: 11px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h2>Login</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-group">
+                   <label for="username">User Name:</label>
+                   <input type="text" required name="username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <div class="auth-box">
+                {% for message in messages %}
+                    <p class="error">{{ message }}</p>
+                {% endfor %}
+            </div>
+            <p>Don't have an account?<a href="{% url 'register' %}">Register</a></p>
+        </div>
+    </div>
+</body>
+</html>

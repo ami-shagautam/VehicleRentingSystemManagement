@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block main_content %}
+
+<div class="payment-container">
+    <h2>Choose Payment Method for {{ booking.vehicle.name }}</h2>
+    <p>Total Amount: Rs {{ booking.total_cost }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>
+            <input type="radio" name="method" value="COD" checked> Cash on Delivery
+        </label><br>
+        <label>
+            <input type="radio" name="method" value="esewa"> eSewa
+        </label><br>
+        <label>
+            <input type="radio" name="method" value="khalti"> Khalti
+        </label><br>
+
+        <button type="submit" class="pay-btn">Proceed To Payment</button>
+    </form>
+</div>
+
+<style>
+.payment-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #f9f9f9bf;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.payment-container h2 {
+     margin-bottom: 15px;
+    color: rgb(23, 22, 21); }
+.payment-container p { 
+    font-weight: bold;
+    /* color: rgb(57, 56, 56) */
+    color: rgb(231, 142, 142)
+     }
+
+.payment-container label { 
+    display: block; 
+    margin: 15px 0;
+    color: rgb(57, 56, 56); 
+}
+.pay-btn {
+    margin-top: 20px;
+    padding: 12px;
+    width: 100%;
+    background: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.pay-btn:hover { background: #d35400; }
+</style>
+
+{% endblock %}

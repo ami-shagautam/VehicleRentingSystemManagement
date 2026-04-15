@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block main_content %}
+
+<div class="booking-details-container">
+
+    <!-- Left: Vehicle Info -->
+    <div class="vehicle-info">
+        <h2>Vehicle Info : </h2>
+        <img src="{{ booking.vehicle.image.url }}" alt="{{ booking.vehicle.name }}">
+        <p class="name"><strong>{{ booking.vehicle.name }}</strong></p>
+        <p class="description">{{ booking.vehicle.description }}</p>
+        <p class="price"><strong>Price per day:</strong> Rs {{ booking.vehicle.price_per_day }}</p>
+    </div>
+
+    <!-- Right: Rental Details -->
+    <div class="rental-details">
+         
+   
+        <h2>Rental Details</h2>
+        <p><strong>Pickup Date:</strong> {{ booking.start_date }}</p>
+        <p><strong>Return Date:</strong> {{ booking.end_date }}</p>
+        <p><strong>Total Days:</strong> {{ booking.total_days }}</p>
+        <p><strong>Total Cost:</strong> Rs {{ booking.total_cost }}</p>
+        <p><strong>Status:</strong> {{ booking.status|capfirst }}</p>
+
+        <!-- Proceed to Payment -->
+        {% if booking.status == 'pending' %}
+        <form method="POST" action="#">
+            {% csrf_token %}
+          
+            <a href="{% url 'process-payment' booking.id %}" class="book-now-btn">Book Now</a>
+        </form>
+        {% endif %}
+    </div>
+
+</div>
+
+<style>
+    .rental-details {
+    /* display: flex; */
+gap: 30px;}
+.booking-details-container {
+    display: flex;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 40px auto;
+    border-radius: 4px;
+    padding: 20px;
+    color: #090751;
+    background-color: rgba(242, 242, 241, 0.586);
+}
+.vehicle-info, .rental-details {
+    flex: 1;
+    background: #f9f9f92f;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.vehicle-info img { 
+    width: 100%; border-radius: 5px; 
+    margin-bottom: 10px; }
+.rental-details p {
+     margin: 8px 0; font-weight: bold; }
+.vehicle-info h2{
+    margin-bottom: 15px;
+    color: #07180e;
+}
+.vehicle-info .name {
+    font-size: 1em;
+    color: #2c3e50;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+.vehicle-info .description {
+    font-size: 0.9em;
+    color: #7f8c8d;
+}
+.vehicle-info .price {
+    font-size: 1em;
+    color: #ef1f08;
+    margin-top: 8px;
+}
+
+.book-now-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background: #e74f09;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.book-now-btn:hover {
+    background: #2980b9;
+}
+
+</style>
+{% endblock %}

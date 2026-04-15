@@ -1,0 +1,44 @@
+{% extends "base-dashboard.html" %}
+
+{% block main_content %}
+
+<h2>Dashboard Overview</h2>
+
+<div class="cards">
+    <div class="card">
+        <h3>{{ total_vehicles }}</h3>
+        <p>Vehicles</p>
+    </div>
+
+    <div class="card">
+        <h3>{{ total_bookings }}</h3>
+        <p>Bookings</p>
+    </div>
+
+    <div class="card">
+        <h3>{{ total_payments }}</h3>
+        <p>Payments</p>
+    </div>
+</div>
+
+<canvas id="myChart"></canvas>
+
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+
+var chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Vehicles', 'Bookings', 'Payments'],
+        datasets: [{
+            label: 'System Data',
+            data: [
+                {{ total_vehicles }},
+                {{ total_bookings }},
+                {{ total_payments }}],
+                }]
+    }
+});
+</script>
+
+{% endblock %}
