@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect,HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.utils import timezone
@@ -113,6 +113,8 @@ class EsewaView(View):
             'transaction_uuid': uuid_val,
             'product_code': 'EPAYTEST',
             'signature': result,
+            "success_url": "http://127.0.0.1:8000/esewa-verify/{payment.id}/",
+            "failure_url": "http://127.0.0.1:8000/payment/{payment.booking.id}/",
         }
 
         return render(request, 'rentingsystem/esewa-form.html', {
@@ -122,6 +124,8 @@ class EsewaView(View):
     
 def esewa_verify(request, payment_id):
     data = request.GET.get('data')
+    if not data:
+        return HttpResponse("Invalid data", status=400)
 
     decoded = base64.b64decode(data).decode('utf-8')
     
@@ -131,15 +135,26 @@ def esewa_verify(request, payment_id):
 
     if map_data.get('status') == "COMPLETE":
         payment.mark_paid(method='esewa')
-        payment.save()
+        # payment.save()
+        booking = payment.booking
+        booking.status = 'confirmed'
+        booking.vehicle.is_available = False
+        booking.vehicle.save()
+        booking.save()
+        messages.success(request, "Payment successfully completed!")
+
+        return redirect('payment-success', booking_id=booking.id)
+
+    messages.error(request, "Payment failed!")
+    return redirect('payment-failed')
 
 
-    return redirect('booking-details',booking_id=payment.booking.id)
+def payment_success(request, booking_id):
+    booking = Booking.objects.get(id=booking_id)
+    return render(request, 'rentingsystem/payment_success.html', {'booking': booking})
 
-
-
-
-
+def payment_failed(request):
+    return render(request, 'rentingsystem/payment_failed.html')
 @login_required
 def profile_settings(request):
     profile, created = Profile.objects.get_or_create(user=request.user)

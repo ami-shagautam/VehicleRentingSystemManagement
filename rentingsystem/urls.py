@@ -14,7 +14,8 @@ urlpatterns = [
     path('profile/settings/', views.profile_settings, name='profile_settings'),
     path('esewa_form/', views.EsewaView.as_view(), name='esewa-form'),
     path('esewa-verify/<int:payment_id>/', views.esewa_verify, name='esewa-verify'),
-
+    path('payment-success/<int:booking_id>/', views.payment_success, name='payment-success'),
+    path('payment-failed/', views.payment_failed, name='payment-failed'),
   
 ]
 
